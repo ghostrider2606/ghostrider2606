@@ -30,4 +30,4 @@
 
 [![An image of @ghostrider2606's Holopin badges, which is a link to view their full Holopin profile](https://holopin.me/ghostrider2606)](https://holopin.io/@ghostrider2606)
 
-![](https://hit.yhype.me/github/profile?account_id=77742428)
+![](https://hit.yhype.me/github/profile?account_id=64772005)
