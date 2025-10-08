@@ -41,9 +41,17 @@ jobs:
           
       # Step 3: Commit the changes back to the repository
       - name: Commit and push changes
+        # ... env variables ...
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md
+          # ... (your git config and git add commands here) ...
+
+          # Try to commit. The '|| echo "No changes to commit"' handles the clean tree state.
           git commit -m "chore(profile): update live stats" || echo "No changes to commit"
-          git push
+
+          # --- CRITICAL FIX: Synchronize with remote ---
+          # This pulls down the latest remote work and reapplies the bot's commit on top,
+          # resolving any non-fast-forward rejection issues.
+          git pull origin main --rebase
+          
+          # Push the synchronized branch
+          git push origin main # or just git push
