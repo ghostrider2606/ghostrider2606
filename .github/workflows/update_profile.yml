@@ -1,0 +1,49 @@
+name: Update GitHub Profile Stats
+on:
+  # Run every 12 hours
+  schedule:
+    - cron: "0 */12 * * *"
+  # Allows manual triggering via the Actions tab
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the repository (required for commit)
+      - uses: actions/checkout@v4
+
+      # Step 2: Use an Action to generate dynamic content
+      # This action fetches data like stars, languages, etc., and updates the README.md file.
+      - name: Generate profile statistics
+        uses: lowlighter/metrics@latest
+        with:
+          # Required token with 'repo' scope for fetching private/detailed data
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          
+          # Output file is your main README
+          output_filename: README.md
+          
+          # --- Configuration for Star/Contribution Data ---
+          # Show repository stars and contribution details (customizable)
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
+          
+          # --- Configuration for Language Stats ---
+          # Fetches languages used and their breakdown
+          plugin_languages: yes
+          plugin_languages_threshold: 0%
+          plugin_languages_ignored: >
+            javascript, css, html
+          
+      # Step 3: Commit the changes back to the repository
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore(profile): update live stats" || echo "No changes to commit"
+          git push
